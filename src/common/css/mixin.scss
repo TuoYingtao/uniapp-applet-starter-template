@@ -1,0 +1,18 @@
+// IPHONE 底部黑色横线适配
+@mixin x-padding-bottom($val: 0upx) {
+	--x-padding-bottom-constant: calc(#{$val} + constant(safe-area-inset-bottom));
+	--x-padding-bottom-env: calc(#{$val} + env(safe-area-inset-bottom));
+	padding-bottom: $val;
+	padding-bottom: --x-padding-bottom-constant; /* no */
+	padding-bottom: calc(#{$val} + env(safe-area-inset-bottom)); /* no */
+}
+@mixin x-padding-top($val: 0upx) {
+	padding-top: $val;
+	padding-top: calc(#{$val} + constant(safe-area-inset-top)); /* no */
+	padding-top: calc(#{$val} + env(safe-area-inset-top)); /* no */
+}
+@mixin x-height-top($val:0upx) {
+	height: $val;
+	height:calc(#{$val} + constant(safe-area-inset-top));
+	height:calc(#{$val} + env(safe-area-inset-top));
+}

@@ -1,0 +1,110 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "tuoyingtao-applet 启动项目"
+			}
+		},
+		{
+			"path": "pages/sort/index",
+			"style": {
+				"navigationBarTitleText": "分类",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/cart/index",
+			"style": {
+				"navigationBarTitleText": "购物车"
+			}
+		},
+		{
+			"path": "pages/user/index",
+			"style": {
+				"navigationBarTitleText": "个人中心"
+			}
+		}
+	],
+	"subPackages": [
+		 {
+			"root": "pages_a",
+			"pages": [
+				{
+					"path": "list",
+					"style": {
+						"navigationBarTitleText": "列表"
+					}
+				}
+			]
+		}
+	],
+	"preloadRule": {
+		"pages/index/index": {
+			"network": "all",
+			"packages": ["__APP__"]
+		},
+		"pages/sort/index": {
+			"network": "all",
+			"packages": ["pages_a"]
+		},
+		"pages/user/index": {
+			"network": "all",
+			"packages": ["pages_a"]
+		}
+	},
+	"tabBar": {
+		"custom": false,
+		"color": "#777777",
+		"selectedColor": "#000000",
+		"backgroundColor": "#ffffff",
+		"borderStyle": "black",
+		"blurEffect": "none",
+		"position": "bottom",
+		"fontSize": "10px",
+		"iconWidth": "24px",
+		"spacing": "3px",
+		"height": "50px",
+		"list": [
+			{
+				"text": "首页",
+				"pagePath": "pages/index/index",
+				"iconPath": "static/tabBar/home.png",
+				"selectedIconPath": "static/tabBar/homeActive.png"
+			},
+			{
+				"text": "分类",
+				"pagePath": "pages/sort/index",
+				"iconPath": "static/tabBar/sort.png",
+				"selectedIconPath": "static/tabBar/sortActive.png"
+			},
+			{
+				"text": "购物车",
+				"pagePath": "pages/cart/index",
+				"iconPath": "static/tabBar/cart.png",
+				"selectedIconPath": "static/tabBar/cartActive.png"
+			},
+			{
+				"text": "我的",
+				"pagePath": "pages/user/index",
+				"iconPath": "static/tabBar/user.png",
+				"selectedIconPath": "static/tabBar/userActive.png"
+			}
+		]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "tuoyingtao-applet 启动项目",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#F8F8F8",
+		"usingComponents": {
+		}
+	},
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue",
+			"^t-(.*)": "@/components/t-components/t-$1/t-$1.vue"
+		}
+	}
+}
