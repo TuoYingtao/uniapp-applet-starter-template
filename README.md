@@ -36,7 +36,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ## 项目结构
 
 ```
-xyl-applet
+uniapp-applet-starter-template
 ├── elemtn-ui -- 第三方UI组件
 ├── public -- 公用文件，不经过webpack处理	
 ├── src -- 核心模块
