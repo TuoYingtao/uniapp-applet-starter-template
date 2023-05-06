@@ -2,7 +2,7 @@ import {getUserInfoStorage} from "@/utils/storage";
 import {navigateTo} from "@/utils/navigate";
 import {userAuditStatusApi} from "@/api/auditSteps";
 import {silenceAuthorizedLogin} from "@/utils/requestTools";
-import {NewUserRegisterEnum} from "@/enum/HomeEnum";
+import {NewUserRegisterEnum} from "@/enum/GlobalEnums";
 
 /**
  * 验证商家是否注册登录

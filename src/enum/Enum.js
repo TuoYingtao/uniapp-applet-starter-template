@@ -30,6 +30,7 @@ class Enum {
   }
 }
 
-Object.freeze(Enum)
+Object.freeze(Enum);
+Object.seal(Enum);
 
 export default Enum;

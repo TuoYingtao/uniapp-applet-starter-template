@@ -2,7 +2,7 @@ import { request } from "@/utils/request"
 
 export function homeApi(param) {
   return request.get({
-    url: "/cms/banner/group",
+    url: "/api/homeData",
     params: param
   })
 }

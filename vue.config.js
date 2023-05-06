@@ -118,17 +118,28 @@ module.exports = {
     //根据环境设置相关变量
     config.plugin('define').tap(args => {
       const BASE_DEV = require('./src/config/config');
-      Object.keys(BASE_DEV).forEach(key => BASE_DEV[key] = `"${BASE_DEV[key]}"`)
+      const baseDevHandler = (data) => {
+        Object.keys(data).forEach(key => {
+          if (Object.prototype.toString.call(data[key]).slice(8, -1) === "Object") {
+            baseDevHandler(data[key])
+          } else {
+            data[key] = `"${data[key]}"`;
+          }
+        })
+      }
+      baseDevHandler(BASE_DEV);
       args[0]['process.env'] = Object.assign({}, args[0]['process.env'], BASE_DEV);
       args[0]['process.env'].VUE_APP_NAME = `"${require('./package.json').name}"`;
       args[0]['process.env'].APP_VERSION = `"${require('./package.json').version}"`;
+      const platform = args[0]['process.env'].VUE_APP_PLATFORM.replace(/\"/g,"");
       manifestFileHandler(function (replaceManifest) {
         replaceManifest('name', `${args[0]['process.env'].VUE_APP_NAME}`);
         replaceManifest('appid', `${args[0]['process.env'].APPLET_APPID}`);
         replaceManifest('versionName', `${args[0]['process.env'].APP_VERSION}`);
-        replaceManifest('mp-weixin.appid', `${args[0]['process.env'].APPLET_APPID}`);
-        replaceManifest('mp-weixin.uniStatistics.enable', 'true');
-        replaceManifest('mp-weixin.debug', args[0]['process.env'].VUE_APP_DEBUG == '"true"' ? 'true' : 'false');
+        replaceManifest(`${platform}.appid`, `${args[0]['process.env'].APPLET_APPID}`);
+        replaceManifest(`${platform}.uniStatistics.enable`, `${args[0]['process.env'].UNI_STATISTICS}`);
+        replaceManifest(`${platform}.optimization.minimize`, `${args[0]['process.env'].OPTIMIZATION}`);
+        replaceManifest(`${platform}.debug`, args[0]['process.env'].VUE_APP_DEBUG == '"true"' ? 'true' : 'false');
       }, true);
       return args
     })

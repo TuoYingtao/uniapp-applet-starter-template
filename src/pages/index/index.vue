@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { NaiveCardEnum } from "@/enum/HomeEnum";
+import { NaiveCardEnum } from "@/enum/GlobalEnums";
 import { mapGetters } from "vuex";
 import { homeApi } from "@/api/home";
 const App = getApp();
