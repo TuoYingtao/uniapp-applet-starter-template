@@ -22,6 +22,9 @@ VantComponent({
         }, clearIcon: {
             type: String,
             value: 'clear',
+        }, extraEventParams: {
+            type: Boolean,
+            value: false,
         } }),
     data: {
         focused: false,
@@ -36,8 +39,13 @@ VantComponent({
         onInput(event) {
             const { value = '' } = event.detail || {};
             this.value = value;
+            const { maxlength } = this.data;
+            if (maxlength !== -1 && value.length > maxlength) {
+                this.value = value.slice(0, maxlength);
+                event.detail.value = this.value;
+            }
             this.setShowClear();
-            this.emitChange();
+            this.emitChange(event.detail);
         },
         onFocus(event) {
             this.focused = true;
@@ -60,7 +68,7 @@ VantComponent({
             this.value = '';
             this.setShowClear();
             nextTick(() => {
-                this.emitChange();
+                this.emitChange({ value: '' });
                 this.$emit('clear', '');
             });
         },
@@ -76,7 +84,7 @@ VantComponent({
             if (value === '') {
                 this.setData({ innerValue: '' });
             }
-            this.emitChange();
+            this.emitChange({ value });
         },
         onLineChange(event) {
             this.$emit('linechange', event.detail);
@@ -84,11 +92,13 @@ VantComponent({
         onKeyboardHeightChange(event) {
             this.$emit('keyboardheightchange', event.detail);
         },
-        emitChange() {
-            this.setData({ value: this.value });
+        emitChange(detail) {
+            const { extraEventParams } = this.data;
+            this.setData({ value: detail.value });
             nextTick(() => {
-                this.$emit('input', this.value);
-                this.$emit('change', this.value);
+                const data = extraEventParams ? detail : detail.value;
+                this.$emit('input', data);
+                this.$emit('change', data);
             });
         },
         setShowClear() {

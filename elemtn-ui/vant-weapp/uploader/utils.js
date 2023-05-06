@@ -25,7 +25,7 @@ export function isVideoFile(item) {
     return false;
 }
 function formatImage(res) {
-    return res.tempFiles.map((item) => (Object.assign(Object.assign({}, pickExclude(item, ['path'])), { type: 'image', url: item.path, thumb: item.path })));
+    return res.tempFiles.map((item) => (Object.assign(Object.assign({}, pickExclude(item, ['path'])), { type: 'image', url: item.tempFilePath, thumb: item.tempFilePath })));
 }
 function formatVideo(res) {
     return [
@@ -38,14 +38,17 @@ function formatMedia(res) {
 function formatFile(res) {
     return res.tempFiles.map((item) => (Object.assign(Object.assign({}, pickExclude(item, ['path'])), { url: item.path })));
 }
-export function chooseFile({ accept, multiple, capture, compressed, maxDuration, sizeType, camera, maxCount, mediaType, }) {
+export function chooseFile({ accept, multiple, capture, compressed, maxDuration, sizeType, camera, maxCount, mediaType, extension, }) {
     return new Promise((resolve, reject) => {
         switch (accept) {
             case 'image':
-                wx.chooseImage({
+                wx.chooseMedia({
                     count: multiple ? Math.min(maxCount, 9) : 1,
+                    mediaType: ['image'],
                     sourceType: capture,
+                    maxDuration,
                     sizeType,
+                    camera,
                     success: (res) => resolve(formatImage(res)),
                     fail: reject,
                 });
@@ -73,12 +76,7 @@ export function chooseFile({ accept, multiple, capture, compressed, maxDuration,
                 });
                 break;
             default:
-                wx.chooseMessageFile({
-                    count: multiple ? maxCount : 1,
-                    type: accept,
-                    success: (res) => resolve(formatFile(res)),
-                    fail: reject,
-                });
+                wx.chooseMessageFile(Object.assign(Object.assign({ count: multiple ? maxCount : 1, type: accept }, (extension ? { extension } : {})), { success: (res) => resolve(formatFile(res)), fail: reject }));
                 break;
         }
     });
