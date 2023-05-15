@@ -1,7 +1,7 @@
 import { request } from "@/utils/request";
 import {getUploadCos, setToken, setUploadCos, setUserInfoStorage} from "@/utils/storage";
 import {camSafeUrlEncode, genNewKey, getCosSecurity} from "@/utils/cos";
-import {showToast} from "@/utils/tools";
+import {showToast} from "@/utils/tools/index";
 import store from "@/store"
 
 const upload = {

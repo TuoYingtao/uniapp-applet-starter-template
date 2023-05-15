@@ -1,7 +1,7 @@
 import {getUserInfoStorage} from "@/utils/storage";
-import {navigateTo} from "@/utils/navigate";
+import {navigateTo} from "@/utils/tools/navigateTools";
 import {userAuditStatusApi} from "@/api/auditSteps";
-import {silenceAuthorizedLogin} from "@/utils/requestTools";
+import {silenceAuthorizedLogin} from "@/utils/tools/requestTools";
 import {NewUserRegisterEnum} from "@/enum/GlobalEnums";
 
 /**

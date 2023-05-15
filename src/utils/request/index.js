@@ -5,7 +5,7 @@ import { VRequest } from "@/utils/request/Request";
 import { getToken } from "../storage";
 import { joinTimestamp, setObjToUrlParams } from "./requestUtils";
 import {CONTENT_TYPE_MAP, DATA_TYPE_MAP, REQUEST_STATUS_CODE, RESPONSE_TYPE_MAP} from "@/utils/request/RequestConstant";
-import { silenceAuthorizedLogin } from "@/utils/requestTools";
+import { silenceAuthorizedLogin } from "@/utils/tools/requestTools";
 import global from "@/config/global";
 
 // 如果是mock模式 或 没启用直连代理 就不配置HOST 会走本地Mock拦截
@@ -266,7 +266,7 @@ function createRequest(options) {
       fixedParams: {
         mpVersion: global.app_version,
         src: global.src,
-        // userKey: global.userKey,
+        userKey: global.userKey,
       }
     }
   }, options || {}));

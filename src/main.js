@@ -9,7 +9,7 @@ import RelativeTime from 'dayjs/plugin/relativeTime'
 import isoWeek from 'dayjs/plugin/isoWeek'
 import uView from 'uview-ui'
 
-import { navigateTo, navigateBack } from '@/utils/navigate';
+import { navigateTo, navigateBack } from '@/utils/tools/navigateTools';
 import filters from '@/utils/filters';
 
 // 设置dayjs语言

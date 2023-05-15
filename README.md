@@ -38,6 +38,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ```
 tuoyingtao-applet-starter-template
 ├── elemtn-ui -- 第三方UI组件
+├── expand-components -- 扩展组件
+├	├── drag -- 拖拽组件
 ├── public -- 公用文件，不经过webpack处理	
 ├── src -- 核心模块
 ├	├── api -- 请求接口配置模块
@@ -208,3 +210,98 @@ eventUserLogin.$emit("页面B的事件参数");
 **注意事项**：
 
 在使用事件监听工具类时，事件接收器（`$on`、`$once`、`$off`）一定要优先于事件触发器（`$emit`）加载，否则事件接收器将失效。
+
+### Request 请求使用方式
+
+在这个框架中的`request`文件夹下，定义了请求工具类，用于服务端与客户端之间的交互。
+
+一、**Reqeust.js**
+
+`config`：`uni.request()`官网的配置。
+
+`options`：`requestOptions`配置信息。
+
+`Reqeust.js`请求类，它是在`uni.request()`基础上做了一层封装，里面含有基本的请求方式等一些功能。
+
+* `get`、`post`、`put`、`delete`、`patch`：在这些方法中都接收两个参数分别是`config`、`options`（这两个参数的详细内容，后续在做介绍）
+
+* `getRequest()`：获取`Request`实例，通过这种方式获取的请求实例，可更具自己的需要选择性的配置。
+
+  ```javascript
+  import { request } from "@/utils/request";
+  const requestInstance =  request.getRequest();
+  const instance = requestInstance({
+      url: '/home',
+      method: 'GET',
+      data: {},
+  }, {    /** options 配置 */   });
+  instance.then((response) => {});
+  instance.catch((error) => {});
+  ```
+
+* `setConfigRequest(options)`：设置`Request`配置参数，这里的配置参数是指`options`。
+
+* `executor(config, options)`：核心执行方法。
+
+二、**RequestConstant.js**
+
+Request 请求常量信息：
+
+* `REQUEST_STATUS_CODE`：服务端请求响应`code`常量。
+* `CONTENT_TYPE_MAP`：Reqeust 请求`content-type`常量。
+* `RESPONSE_TYPE_MAP`：`uni.request()`请求响应类型。（参照`uni.request()`官方文档）
+* `DATA_TYPE_MAP`：`uni.request()`请求数据类型。（参照`uni.request()`官方文档）
+
+三、**ResponseErrorHandler.js**
+
+Request 请求错误异常类：
+
+* `NetworkError`：网络异常类。
+* `RequestError`：Http 请求异常类。
+* `ResponseError`：Request 响应异常类。
+
+四、**index.js**配置
+
+* `isSilenceLock`：静默锁；用于小程序静默登录控制。
+* `onAccessTokenFetched`：在静默登录成功后，重新发起之前没有通过的请求。
+* `transform`：Request 请求处理方法，在这个对象中有请求、响应的前后置处理。
+  * `transformRequestHook(response, options)`：响应处理；
+  * `beforeRequestHook(config, options)`：请求前置处理；
+  * `requestInterceptors(config, options)`：请求前的拦截器；
+  * `responseInterceptors([error, response], conf)`：响应拦截器；
+  * `responseInterceptorsCatch(error)`：响应错误拦截；
+* `createRequest(options)`：创建 Request 请求实例对象。在这个方法中`new VRequest(options)`并将其返回。而这个`options`则是基本请求配置信息。
+
+五、**使用方法**
+
+除了上面通过`getRequest()`获取请求实例与`new VRequest()`的两种方式；还有一种最常规的写法，则是通过`createRequest(options)`返回的请求实例：
+
+```javascript
+import { request } from "@/utils/request";
+
+export function homeApi(param) {
+  return request.get({
+    url: "/api/homeData",
+    params: param
+  }, {
+      urlPrefix: '/admin',
+      fieldToken: 'token',
+      // ...requestOptions
+  })
+}
+
+function getList() {
+    homeApi({ page: 1 }).then(data => {});
+}
+
+async function getList() {
+    try {
+        const data = await homeApi({ page: 1 });
+        // 只有请求成功了才会执行下面的代码。
+	    console.log(data);
+    } catch (error) {
+        // 错误执行
+    }
+}
+```
+

@@ -1,8 +1,8 @@
 import qs from 'qs';
 import isString from 'lodash/isString'
 import cloneDeep from 'lodash/cloneDeep';
-import { navigateTo } from '@/utils/navigate';
-import {isEmpty} from "@/utils/index";
+import { navigateTo } from '@/utils/tools/navigateTools';
+import {isEmpty} from "@/utils";
 
 /**
  * 提示信息
@@ -12,6 +12,55 @@ import {isEmpty} from "@/utils/index";
 export function showToast(str, icon = 'none', duration = 1500,mask = true) {
 	if (isEmpty(str)) return new Error(`提示信息不能为空`);
 	uni.showToast({ icon: icon, title: str, duration: duration,mask: mask });
+}
+
+/**
+ * 对话框
+ * @param config 对话框配置
+ * @param successCallback 确认事件
+ * @param cancelCallback 取消事件
+ * @returns {Promise<unknown>}
+ */
+export function showModal(config, successCallback, cancelCallback) {
+	return new Promise((resolve, reject) => {
+		const conf = {
+			title: '提示',
+			content: "",
+			showCancel: true,
+			cancelText: "取消",
+			cancelColor: "#000000",
+			confirmText: "确定",
+			confirmColor: "#FF0000",
+			editable: false,
+			placeholderText: "",
+			success: (res) => {
+				if (res.confirm) {
+					resolve(true);
+				} else if (res.cancel) {
+					resolve(false);
+				}
+			},
+			fail: (err) => {
+				console.error(err);
+				reject(err);
+			}
+		};
+		if (!isEmpty(successCallback)) {
+			config.success = (res) => {
+				if (res.confirm) {
+					return successCallback(res);
+				}
+			}
+		}
+		if (!isEmpty(cancelCallback)) {
+			config.success = (res) => {
+				if (res.cancel) {
+					return cancelCallback(res);
+				}
+			}
+		}
+		uni.showModal(Object.assign({}, conf, config));
+	})
 }
 
 /**

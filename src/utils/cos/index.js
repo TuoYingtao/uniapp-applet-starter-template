@@ -1,4 +1,4 @@
-import { getCredentials } from "@/utils/requestTools";
+import { getCredentials } from "@/utils/tools/requestTools";
 
 const CosAuth = require('./cos-auth');
 
